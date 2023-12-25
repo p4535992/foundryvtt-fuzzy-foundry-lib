@@ -87,6 +87,7 @@ Any issues, bugs, or feature requests are always welcome to be reported directly
 ## License
 
 - **[Dig Down](https://github.com/theripper93/fuzzy-foundry)** : [GPL-3.0 license](https://github.com/theripper93/fuzzy-foundry/blob/master/LICENSE)
+- **[LZ-String](https://github.com/pieroxy/lz-string)**: [MIT](https://github.com/pieroxy/lz-string/blob/master/LICENSE)
 
 All the images used in this module are generated with [bing create](https://www.bing.com/create) under these [term of use](https://www.bing.com/new/termsofuse?FORM=GENTOS)
 
@@ -97,3 +98,4 @@ This package is under an [GPL-3.0 license](LICENSE) and the [Foundry Virtual Tab
 A special ty to the original authors [theRipper93](https://theripper93.com/), for the idea , the inspiration and the initial template.
 
 - [theRipper93](https://theripper93.com/) and the module [Dig Down](https://github.com/theripper93/fuzzy-foundry)
+- [pieroxy](https://github.com/pieroxy/) and the project [LZ-String](https://github.com/pieroxy/lz-string)*
