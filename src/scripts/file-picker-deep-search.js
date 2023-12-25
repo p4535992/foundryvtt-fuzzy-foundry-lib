@@ -1,47 +1,11 @@
 import CONSTANTS from "./constants/constants";
+import { FuzzySearchFilters } from "./fuzzyset-search-filters";
 
 export class FilePickerDeepSearch {
   constructor(force = false) {
     this._fileIndexCache = {};
     this._searchCache = {};
-    this.validExtensions = [
-      ".jpg",
-      ".JPG",
-      ".jpeg",
-      ".JPEG",
-      ".png",
-      ".PNG",
-      ".svg",
-      ".SVG",
-      ".webp",
-      ".WEBP",
-      ".mp4",
-      ".MP4",
-      ".ogg",
-      ".OGG",
-      ".webm",
-      ".WEBM",
-      ".m4v",
-      ".M4V",
-      ".mp3",
-      ".MP3",
-      ".wav",
-      ".WAV",
-      ".flac",
-      ".FLAC",
-      ".aac",
-      ".AAC",
-      ".m4a",
-      ".M4A",
-      ".ogg",
-      ".OGG",
-      ".glb",
-      ".GLB",
-      ".gltf",
-      ".GLTF",
-      ".fbx",
-      ".FBX",
-    ];
+    this.validExtensions = CONSTANTS.VALID_EXTENSIONS;
     this._excludeKeywords = game.settings
       .get(CONSTANTS.MODULE_ID, "deepFileExclude")
       .split(",")

@@ -26,9 +26,9 @@ If you want to support more modules of this kind, I invite you to go and support
 
 Perform deep searches inside folder structures and sidebars and fuzzy searches on compendiums and sidebars. The text in this journals contains the word
 
-_Basically it is the extended "Dig Down" module to **search by tags (or otherwise keywords)** that can be integrated by hand or by other modules and **with an api that can be used with macros or with other modules**. Being theripper93 super busy with larger and more complex projects I created this module. It can replace dig down in its entirety, or work together as you wish._
+_Basically it is the extended "Dig Down" module to **search by tags (or otherwise keywords)** that can be integrated by hand or by other modules and **with an api that can be used with macros or with other modules** and **using the library [fuse](https://github.com/krisk/fuse) as alternative to the [fuzzyset.js](https://github.com/Glench/fuzzyset.js)+[LZ-String](https://github.com/pieroxy/lz-string)** . Being theripper93 super busy with larger and more complex projects I created this module. It can replace dig down in its entirety, or work together as you wish._
 
-You can find the original documentation on the [WIKI](https://api.theripper93.com/modulewiki/fuzzy-foundry/free), but i will put a copy and paste here.
+You can find the original documentation on the [WIKI](https://api.theripper93.com/modulewiki/fuzzy-foundry/free), but i will maintain a copy of the documentation here.
 
 ### Searches
 
@@ -143,3 +143,4 @@ A special ty to the original authors [theRipper93](https://theripper93.com/), fo
 - [theRipper93](https://theripper93.com/) and the module [Dig Down](https://github.com/theripper93/fuzzy-foundry)
 - [pieroxy](https://github.com/pieroxy/) and the project [LZ-String](https://github.com/pieroxy/lz-string)
 - [Glench](https://github.com/Glench/) and the project [fuzzyset.js](https://github.com/Glench/fuzzyset.js)
+- [krisk](https://github.com/krisk) and the project [fuse](https://github.com/krisk/fuse) 
