@@ -1,152 +1,47 @@
-Hooks.once("init", function () {
+import API from "./API/api";
+import { FuzzyChatSearchHelpers } from "./fuzzy-chat-search-helpers";
+import CONSTANTS from "./constants/constants";
+import { initializeDeepSearchCache } from "./settings";
+
+// Register Game Settings
+export const initHooks = () => {
   libWrapper.register(
-    "fuzzy-foundry",
+    CONSTANTS.MODULE_ID,
     "DocumentDirectory.prototype._matchSearchEntries",
     FuzzySearchFilters._matchSearchEntries,
     "OVERRIDE"
   );
 
   libWrapper.register(
-    "fuzzy-foundry",
+    CONSTANTS.MODULE_ID,
     "Compendium.prototype._matchSearchEntries",
     FuzzySearchFilters.CompendiumSearch,
     "OVERRIDE"
   );
 
   libWrapper.register(
-    "fuzzy-foundry",
+    CONSTANTS.MODULE_ID,
     "FilePicker.prototype._onSearchFilter",
     FilePickerDeepSearch._onSearchFilter,
     "MIXED"
   );
-});
+};
 
-Hooks.once("init", function () {
-  function initializeDeepSearchCache() {
-    if (
-      game.settings.get("fuzzy-foundry", "deepFile") &&
-      (game.user.isGM || game.settings.get("fuzzy-foundry", "deepFilePlayers"))
-    )
-      canvas.deepSearchCache = new FilePickerDeepSearch();
-    else canvas.deepSearchCache = null;
-  }
+export const setupHooks = () => {
+  // warn("Setup Hooks processing");
+  game.modules.get(CONSTANTS.MODULE_ID).api = API;
+};
 
-  game.settings.register("fuzzy-foundry", "deepFile", {
-    name: game.i18n.localize("fuzz.settings.deepFile.name"),
-    hint: game.i18n.localize("fuzz.settings.deepFile.hint"),
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: true,
-    onChange: initializeDeepSearchCache,
-  });
+export const readyHooks = () => {
+  initializeDeepSearchCache();
+};
 
-  game.settings.register("fuzzy-foundry", "deepFileExclude", {
-    name: game.i18n.localize("fuzz.settings.deepFileExclude.name"),
-    hint: game.i18n.localize("fuzz.settings.deepFileExclude.hint"),
-    scope: "world",
-    config: true,
-    type: String,
-    default: "",
-    onChange: initializeDeepSearchCache,
-  });
-
-  game.settings.register("fuzzy-foundry", "deepFilePlayers", {
-    name: game.i18n.localize("fuzz.settings.deepFilePlayers.name"),
-    hint: game.i18n.localize("fuzz.settings.deepFilePlayers.hint"),
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: false,
-  });
-
-  game.settings.register("fuzzy-foundry", "deepFileCharLimit", {
-    name: game.i18n.localize("fuzz.settings.deepFileCharLimit.name"),
-    hint: game.i18n.localize("fuzz.settings.deepFileCharLimit.hint"),
-    scope: "world",
-    config: true,
-    type: Number,
-    range: {
-      min: 1,
-      max: 10,
-      step: 1,
-    },
-    default: 4,
-  });
-
-  game.settings.register("fuzzy-foundry", "chatSearch", {
-    name: game.i18n.localize("fuzz.settings.chatSearch.name"),
-    hint: game.i18n.localize("fuzz.settings.chatSearch.hint"),
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: true,
-    onChange: () => {
-      ui.chat.render(true);
-    },
-  });
-
-  game.settings.register("fuzzy-foundry", "props", {
-    name: game.i18n.localize("fuzz.settings.props.name"),
-    hint: game.i18n.localize("fuzz.settings.props.hint"),
-    scope: "world",
-    config: true,
-    type: String,
-    default: "data.details.cr",
-  });
-
-  game.settings.register("fuzzy-foundry", "excavateFilters", {
-    name: game.i18n.localize("fuzz.settings.excavateFilters.name"),
-    hint: game.i18n.localize("fuzz.settings.excavateFilters.hint"),
-    scope: "world",
-    config: true,
-    type: String,
-    default: "",
-  });
-
-  game.settings.register("fuzzy-foundry", "excavateWildcard", {
-    name: game.i18n.localize("fuzz.settings.excavateWildcard.name"),
-    hint: game.i18n.localize("fuzz.settings.excavateWildcard.hint"),
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: false,
-  });
-
-  game.settings.register("fuzzy-foundry", "useS3", {
-    name: game.i18n.localize("fuzz.settings.useS3.name"),
-    hint: game.i18n.localize("fuzz.settings.useS3.hint"),
-    scope: "world",
-    config: true,
-    type: Boolean,
-    default: false,
-    onChange: initializeDeepSearchCache,
-  });
-
-  game.settings.register("fuzzy-foundry", "useS3name", {
-    name: game.i18n.localize("fuzz.settings.useS3name.name"),
-    hint: game.i18n.localize("fuzz.settings.useS3name.hint"),
-    scope: "world",
-    config: true,
-    type: String,
-    default: "",
-    onChange: initializeDeepSearchCache,
-  });
-
-  game.settings.register("fuzzy-foundry", "localFileCache", {
-    name: "",
-    hint: "",
-    scope: "client",
-    config: false,
-    type: String,
-    default: "",
-  });
-
-  Hooks.once("ready", initializeDeepSearchCache);
+Hooks.on("renderSidebarTab", (app, html, data) => {
+  FuzzyChatSearchHelpers.chatSearch(app, html, data);
 });
 
 Hooks.on("renderTokenConfig", (app, html) => {
-  if (!game.settings.get("fuzzy-foundry", "deepFile")) return;
+  if (!game.settings.get(CONSTANTS.MODULE_ID, "deepFile")) return;
   let button = `<button type="button" id="excavator" class="file-picker" data-type="imagevideo" data-target="img" title="${game.i18n.localize(
     "fuzz.tconfing.excavat.tip"
   )}" tabindex="-1">
@@ -155,13 +50,13 @@ Hooks.on("renderTokenConfig", (app, html) => {
   html.find(".file-picker").after(button);
   const name = app.object?.actor?.name || app.object?.document?.name;
   const exclude = game.settings
-    .get("fuzzy-foundry", "excavateFilters")
+    .get(CONSTANTS.MODULE_ID, "excavateFilters")
     .split(",")
     .filter((s) => s !== "");
   html.on("click", "#excavator", (e) => {
     e.preventDefault();
     const wildCheck = html.find(`input[name="randomImg"]`)[0] ? html.find(`input[name="randomImg"]`)[0].checked : false;
-    const isWildcard = wildCheck && game.settings.get("fuzzy-foundry", "excavateWildcard");
+    const isWildcard = wildCheck && game.settings.get(CONSTANTS.MODULE_ID, "excavateWildcard");
     const btn = $(e.currentTarget);
     btn.find("#exicon")[0].className = "fas fa-spinner fa-spin";
     btn.prop("disabled", true);
@@ -173,21 +68,6 @@ Hooks.on("renderTokenConfig", (app, html) => {
     }, 150);
   });
 });
-
-Object.byString = function (o, s) {
-  s = s.replace(/\[(\w+)\]/g, ".$1"); // convert indexes to properties
-  s = s.replace(/^\./, ""); // strip a leading dot
-  var a = s.split(".");
-  for (var i = 0, n = a.length; i < n; ++i) {
-    var k = a[i];
-    if (k in o) {
-      o = o[k];
-    } else {
-      return;
-    }
-  }
-  return o;
-};
 
 Hooks.on("renderFilePicker", (app, html) => {
   html.find('input[type="search"]').focus();
@@ -214,14 +94,30 @@ Hooks.on("changeSidebarTab", (settings) => {
   });
 });
 
+Hooks.on("renderJournalSheet", (app, html) => {
+  if (app.document.deepSearchResult?.anchor) {
+    setTimeout(() => {
+      app.document.sheet.render(true, {
+        pageId: app.document.deepSearchResult.pageId,
+        anchor: app.document.deepSearchResult.anchor,
+      });
+      delete app.document.deepSearchResult;
+    }, 100);
+  }
+});
+
+// =============================
+// OVERRIDE
+// =============================
+
 Token.prototype.excavate = async function (wildCheck = false, exclude) {
   exclude =
     exclude ??
     game.settings
-      .get("fuzzy-foundry", "excavateFilters")
+      .get(CONSTANTS.MODULE_ID, "excavateFilters")
       .split(",")
       .filter((s) => s !== "");
-  const isWildcard = wildCheck && game.settings.get("fuzzy-foundry", "excavateWildcard");
+  const isWildcard = wildCheck && game.settings.get(CONSTANTS.MODULE_ID, "excavateWildcard");
   const newPath = tokenExcavator.excavate(this.actor?.name ?? this.document.name, isWildcard, exclude);
   if (newPath) await this.document.update({ img: newPath });
   console.log(newPath ? `Excavation Successfull! ${newPath}` : "Excavation Failed!");
@@ -232,10 +128,10 @@ Actor.prototype.excavate = async function (wildCheck = true, exclude) {
   exclude =
     exclude ??
     game.settings
-      .get("fuzzy-foundry", "excavateFilters")
+      .get(CONSTANTS.MODULE_ID, "excavateFilters")
       .split(",")
       .filter((s) => s !== "");
-  const isWildcard = wildCheck && game.settings.get("fuzzy-foundry", "excavateWildcard");
+  const isWildcard = wildCheck && game.settings.get(CONSTANTS.MODULE_ID, "excavateWildcard");
   const newPath = tokenExcavator.excavate(this.document.name, isWildcard, exclude);
   const portrait =
     this.document.img == "icons/svg/mystery-man.svg"
@@ -261,15 +157,3 @@ Actors.prototype.excavateAll = async function (wildCheck = true, exclude, folder
     console.log(`Processed Actor ${processed} of ${tot}: ${actor.document.name} - ${filename ? filename : "Failed"}`);
   }
 };
-
-Hooks.on("renderJournalSheet", (app, html) => {
-  if (app.document.deepSearchResult?.anchor) {
-    setTimeout(() => {
-      app.document.sheet.render(true, {
-        pageId: app.document.deepSearchResult.pageId,
-        anchor: app.document.deepSearchResult.anchor,
-      });
-      delete app.document.deepSearchResult;
-    }, 100);
-  }
-});

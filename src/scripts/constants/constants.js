@@ -3,6 +3,7 @@ const CONSTANTS = {
   PATH: `modules/fuzzy-foundry-lib/`,
   FLAGS: {},
   API: {},
+  FILEPICKER_PLUS_MODULE_ID: "filepicker-plus",
 };
 
 CONSTANTS.PATH = `modules/${CONSTANTS.MODULE_ID}/`;

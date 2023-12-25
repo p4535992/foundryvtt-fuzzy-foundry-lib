@@ -1,4 +1,21 @@
+import CONSTANTS from "../../constants/constants";
+
 export class FuzzySearchFilters {
+  static _byString(o, s) {
+    s = s.replace(/\[(\w+)\]/g, ".$1"); // convert indexes to properties
+    s = s.replace(/^\./, ""); // strip a leading dot
+    var a = s.split(".");
+    for (var i = 0, n = a.length; i < n; ++i) {
+      var k = a[i];
+      if (k in o) {
+        o = o[k];
+      } else {
+        return;
+      }
+    }
+    return o;
+  }
+
   static _matchSearchEntries(query, entryIds, folderIds, includeFolder) {
     const nameOnlySearch = this.collection.searchMode === CONST.DIRECTORY_SEARCH_MODES.NAME;
     const entries = this.collection.index ?? this.collection.contents;
@@ -411,9 +428,9 @@ export class FuzzySearchFilters {
     if (document.documentName != "Actor") {
       return false;
     }
-    const deepProps = game.settings.get("fuzzy-foundry", "props").split(",");
+    const deepProps = game.settings.get(CONSTANTS.MODULE_ID, "props").split(",");
     for (let prop of deepProps) {
-      const p = Object.byString(document, prop);
+      const p = FuzzySearchFilters._byString(document, prop);
       if (!p) continue;
       const propValue = String(p);
 

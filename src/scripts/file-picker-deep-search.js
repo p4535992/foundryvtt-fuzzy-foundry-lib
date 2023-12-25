@@ -1,3 +1,5 @@
+import CONSTANTS from "./constants/constants";
+
 export class FilePickerDeepSearch {
   constructor(force = false) {
     this._fileIndexCache = {};
@@ -41,14 +43,14 @@ export class FilePickerDeepSearch {
       ".FBX",
     ];
     this._excludeKeywords = game.settings
-      .get("fuzzy-foundry", "deepFileExclude")
+      .get(CONSTANTS.MODULE_ID, "deepFileExclude")
       .split(",")
       .map((e) => e.replace(/\s/g, "%20"))
       .map((e) => e.trim())
       .filter((e) => e);
-    this.s3 = game.settings.get("fuzzy-foundry", "useS3");
-    this.s3name = game.settings.get("fuzzy-foundry", "useS3name");
-    this.fpPlus = game.modules.get("filepicker-plus")?.active;
+    this.s3 = game.settings.get(CONSTANTS.MODULE_ID, "useS3");
+    this.s3name = game.settings.get(CONSTANTS.MODULE_ID, "useS3name");
+    this.fpPlus = game.modules.get(CONSTANTS.FILEPICKER_PLUS_MODULE_ID)?.active;
     this.s3URLPrefix = undefined;
     this.buildAllCache(force).then(() => {
       this.fs = FuzzySearchFilters.FuzzySet(Object.keys(this._fileIndexCache), true);
@@ -114,7 +116,7 @@ export class FilePickerDeepSearch {
       prefixURL = "/" + gamepath[1];
     }
 
-    const localCache = game.settings.get("fuzzy-foundry", "localFileCache");
+    const localCache = game.settings.get(CONSTANTS.MODULE_ID, "localFileCache");
     let storedCache, storedCacheResponse;
     const userData = await FilePicker.browse("user", "./");
     const jsonPath = userData.files.find((f) => f.includes("DigDownCache.json"));
@@ -123,9 +125,9 @@ export class FilePickerDeepSearch {
       storedCache = localCache || (await storedCacheResponse.text());
       if (!localCache) {
         try {
-          await game.settings.set("fuzzy-foundry", "localFileCache", storedCache);
+          await game.settings.set(CONSTANTS.MODULE_ID, "localFileCache", storedCache);
         } catch {
-          game.settings.set("fuzzy-foundry", "localFileCache", "");
+          game.settings.set(CONSTANTS.MODULE_ID, "localFileCache", "");
           console.warn(
             "Dig Down | Failed to save local cache. This is normal when indexing a very high amount of files, you might experience slower initialization."
           );
@@ -219,9 +221,9 @@ export class FilePickerDeepSearch {
     };
     const string = this.en(JSON.stringify(data));
     try {
-      await game.settings.set("fuzzy-foundry", "localFileCache", string);
+      await game.settings.set(CONSTANTS.MODULE_ID, "localFileCache", string);
     } catch {
-      game.settings.set("fuzzy-foundry", "localFileCache", "");
+      game.settings.set(CONSTANTS.MODULE_ID, "localFileCache", "");
       console.warn(
         "Dig Down | Failed to save local cache. This is normal when indexing a very high amount of files, you might experience slower initialization."
       );
@@ -233,7 +235,7 @@ export class FilePickerDeepSearch {
     let file = new File([blob], "DigDownCache.json", { type: "text" });
     await FilePicker.upload("data", "", file, {});
 
-    //await game.settings.set("fuzzy-foundry", "fileCache", data);
+    //await game.settings.set(CONSTANTS.MODULE_ID, "fileCache", data);
     ui.notifications.info(game.i18n.localize("fuzz.warn.done"), {
       permanent: true,
     });
@@ -273,11 +275,11 @@ export class FilePickerDeepSearch {
   }
 
   static async _onSearchFilter(wrapped, event, query, rgx, html) {
-    const enableDeepSearch = game.settings.get("fuzzy-foundry", "deepFile");
+    const enableDeepSearch = game.settings.get(CONSTANTS.MODULE_ID, "deepFile");
     if (!enableDeepSearch) return wrapped(event, query, rgx, html);
-    const enablePlayers = game.settings.get("fuzzy-foundry", "deepFilePlayers");
+    const enablePlayers = game.settings.get(CONSTANTS.MODULE_ID, "deepFilePlayers");
     if (!enablePlayers && !game.user.isGM) return wrapped(event, query, rgx, html);
-    const qLength = game.settings.get("fuzzy-foundry", "deepFileCharLimit");
+    const qLength = game.settings.get(CONSTANTS.MODULE_ID, "deepFileCharLimit");
     if ((!query || query.length < qLength) && !this.reset) {
       this.reset = true;
       this.render(true);
