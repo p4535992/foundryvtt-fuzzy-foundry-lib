@@ -2,20 +2,22 @@ import API from "./API/api";
 import { FuzzyChatSearchHelpers } from "./search/chat-search-helpers";
 import CONSTANTS from "./constants/constants";
 import { initializeDeepSearchCache } from "./settings";
+import { FuzzySetSearchHelpers } from "./search/fuzzyset-search-helpers";
+import { FilePickerDeepSearch } from "./file-picker-deep-search";
 
 // Register Game Settings
 export const initHooks = () => {
   libWrapper.register(
     CONSTANTS.MODULE_ID,
     "DocumentDirectory.prototype._matchSearchEntries",
-    FuzzySearchFilters._matchSearchEntries,
+    FuzzySetSearchHelpers._matchSearchEntries,
     "OVERRIDE"
   );
 
   libWrapper.register(
     CONSTANTS.MODULE_ID,
     "Compendium.prototype._matchSearchEntries",
-    FuzzySearchFilters.CompendiumSearch,
+    FuzzySetSearchHelpers.CompendiumSearch,
     "OVERRIDE"
   );
 

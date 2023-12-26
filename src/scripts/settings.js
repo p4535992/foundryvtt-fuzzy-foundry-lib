@@ -1,6 +1,6 @@
-import CONSTANTS from "./constants/constants";
-import { FilePickerDeepSearch } from "./file-picker-deep-search";
-import { debug } from "./libs/lib";
+import CONSTANTS from "./constants/constants.js";
+import { FilePickerDeepSearch } from "./file-picker-deep-search.js";
+import { debug } from "./lib/lib.js";
 
 export function initializeDeepSearchCache() {
   if (

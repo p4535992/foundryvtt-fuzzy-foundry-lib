@@ -1,5 +1,9 @@
 /* ------------------------------------ */
 /* Initialize module					*/
+
+import { initHooks, readyHooks, setupHooks } from "./scripts/config";
+import { registerSettings } from "./scripts/settings";
+
 /* ------------------------------------ */
 Hooks.once("init", async () => {
   // log(`${CONSTANTS.MODULE_ID} | Initializing ${CONSTANTS.MODULE_ID}`);
