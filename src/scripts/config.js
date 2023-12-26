@@ -1,5 +1,5 @@
 import API from "./API/api";
-import { FuzzyChatSearchHelpers } from "./fuzzy-chat-search-helpers";
+import { FuzzyChatSearchHelpers } from "./search/chat-search-helpers";
 import CONSTANTS from "./constants/constants";
 import { initializeDeepSearchCache } from "./settings";
 

@@ -133,6 +133,7 @@ Any issues, bugs, or feature requests are always welcome to be reported directly
 - **[Dig Down](https://github.com/theripper93/fuzzy-foundry)** : [GPL-3.0 license](https://github.com/theripper93/fuzzy-foundry/blob/master/LICENSE)
 - **[LZ-String](https://github.com/pieroxy/lz-string)**: [MIT](https://github.com/pieroxy/lz-string/blob/master/LICENSE)
 - **[fuzzyset.js](https://github.com/Glench/fuzzyset.js)**: [GPL-3.0 license](https://github.com/Glench/fuzzyset.js/blob/master/LICENSE.md)
+- **[fuse](https://github.com/krisk/fuse)**: [Apache License 2.0](https://github.com/krisk/Fuse/blob/main/LICENSE)
 
 This package is under an [GPL-3.0 license](LICENSE) and the [Foundry Virtual Tabletop Limited License Agreement for module development](https://foundryvtt.com/article/license/).
 

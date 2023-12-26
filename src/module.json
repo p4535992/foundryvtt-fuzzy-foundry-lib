@@ -81,7 +81,8 @@
   "systems": [],
   "scripts": [
     "scripts/libs/lz-string-1.5.0/lz-string.min.js",
-    "scripts/libs/fuzzyset-1.0.7/fuzzyset.min.js"
+    "scripts/libs/fuzzyset-1.0.7/fuzzyset.min.js",
+    "scripts/libs/Fuse-6.6.2/fuse.min.js"
   ],
   "esmodules": ["module.js"],
   "styles": ["styles/module.css"],

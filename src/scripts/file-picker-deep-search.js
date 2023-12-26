@@ -1,5 +1,5 @@
 import CONSTANTS from "./constants/constants";
-import { FuzzySearchFilters } from "./fuzzyset-search-filters";
+import { FuzzySetSearchHelpers } from "./search/fuzzyset-search-helpers";
 
 export class FilePickerDeepSearch {
   constructor(force = false) {
@@ -17,7 +17,7 @@ export class FilePickerDeepSearch {
     this.fpPlus = game.modules.get(CONSTANTS.FILEPICKER_PLUS_MODULE_ID)?.active;
     this.s3URLPrefix = undefined;
     this.buildAllCache(force).then(() => {
-      this.fs = FuzzySearchFilters.FuzzySet(Object.keys(this._fileIndexCache), true);
+      this.fs = FuzzySetSearchHelpers.FuzzySet(Object.keys(this._fileIndexCache), true);
     });
   }
 
@@ -176,7 +176,7 @@ export class FilePickerDeepSearch {
   }
 
   async loadCache() {
-    await FilePicker.browse("user", "modules/fuzzy-foundry");
+    await FilePicker.browse("user", `modules/${CONSTANTS.MODULE_ID}`);
   }
 
   async saveCache() {

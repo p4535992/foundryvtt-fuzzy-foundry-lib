@@ -1,6 +1,6 @@
-import CONSTANTS from "./constants/constants";
+import CONSTANTS from "../constants/constants";
 
-export class FuzzySearchFilters {
+export class FuzzySetSearchHelpers {
   static _byString(o, s) {
     s = s.replace(/\[(\w+)\]/g, ".$1"); // convert indexes to properties
     s = s.replace(/^\./, ""); // strip a leading dot
@@ -23,7 +23,7 @@ export class FuzzySearchFilters {
     // Copy the folderIds to a new set so we can add to the original set without incorrectly adding child entries
     const matchedFolderIds = new Set(folderIds);
     const fuzzyDB = entries.map((e) => this._getEntryName(e));
-    const fs = FuzzySearchFilters.FuzzySet(fuzzyDB, true);
+    const fs = FuzzySetSearchHelpers.FuzzySet(fuzzyDB, true);
     const qresult = fs.get(query.source) || [];
     for (let r of qresult) {
       if (r[0] > 0.5) {
@@ -41,14 +41,14 @@ export class FuzzySearchFilters {
         nameOnlySearch &&
         (query.test(SearchFilter.cleanQuery(entryName)) ||
           result.includes(entryName) ||
-          FuzzySearchFilters.fuzzyMatchActor(entry, query.source))
+          FuzzySetSearchHelpers.fuzzyMatchActor(entry, query.source))
       ) {
         entryIds.add(entryId);
         includeFolder(entry.folder);
         continue;
       }
 
-      if (!nameOnlySearch && FuzzySearchFilters.fuzzyMatchActor(entry, query.source, true)) {
+      if (!nameOnlySearch && FuzzySetSearchHelpers.fuzzyMatchActor(entry, query.source, true)) {
         entryIds.add(entryId);
         includeFolder(entry.folder);
       }
@@ -72,7 +72,7 @@ export class FuzzySearchFilters {
     // Copy the folderIds to a new set so we can add to the original set without incorrectly adding child entries
     const matchedFolderIds = new Set(folderIds);
     const fuzzyDB = entries.map((e) => this._getEntryName(e));
-    const fs = FuzzySearchFilters.FuzzySet(fuzzyDB, true);
+    const fs = FuzzySetSearchHelpers.FuzzySet(fuzzyDB, true);
     const qresult = fs.get(query.source) || [];
     for (let r of qresult) {
       if (r[0] > 0.5) {
@@ -90,7 +90,7 @@ export class FuzzySearchFilters {
         nameOnlySearch &&
         (query.test(SearchFilter.cleanQuery(entryName)) ||
           result.includes(entryName) ||
-          FuzzySearchFilters.fuzzyMatchActor(entry, query.source))
+          FuzzySetSearchHelpers.fuzzyMatchActor(entry, query.source))
       ) {
         entryIds.add(entryId);
         includeFolder(entry.folder);
@@ -438,7 +438,7 @@ export class FuzzySearchFilters {
     }
     const deepProps = game.settings.get(CONSTANTS.MODULE_ID, "props").split(",");
     for (let prop of deepProps) {
-      const p = FuzzySearchFilters._byString(document, prop);
+      const p = FuzzySetSearchHelpers._byString(document, prop);
       if (!p) continue;
       const propValue = String(p);
 
@@ -446,7 +446,7 @@ export class FuzzySearchFilters {
         if (propValue.toLowerCase() === query.replace("!", "").toLowerCase()) return true;
         else continue;
       }
-      const fs = FuzzySearchFilters.FuzzySet(propValue, true);
+      const fs = FuzzySetSearchHelpers.FuzzySet(propValue, true);
       const qresult = fs.get(query) || [];
       if (qresult.length > 0 || propValue.toLowerCase().includes(query.toLowerCase())) {
         return true;
