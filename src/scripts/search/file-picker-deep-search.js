@@ -1,5 +1,5 @@
-import CONSTANTS from "./constants/constants";
-import { FuzzySetSearchHelpers } from "./search/fuzzyset-search-helpers";
+import CONSTANTS from "../constants/constants";
+import { FuzzySetSearchHelpers } from "./fuzzyset-search-helpers";
 
 export class FilePickerDeepSearch {
   constructor(force = false) {

@@ -3,7 +3,7 @@ import { FuzzyChatSearchHelpers } from "./search/chat-search-helpers";
 import CONSTANTS from "./constants/constants";
 import { initializeDeepSearchCache } from "./settings";
 import { FuzzySetSearchHelpers } from "./search/fuzzyset-search-helpers";
-import { FilePickerDeepSearch } from "./file-picker-deep-search";
+import { FilePickerDeepSearch } from "./search/file-picker-deep-search";
 
 // Register Game Settings
 export const initHooks = () => {
